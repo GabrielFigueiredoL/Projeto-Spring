@@ -1,12 +1,8 @@
 package com.gabrielfigueiredo.springcourse.config;
 
-import com.gabrielfigueiredo.springcourse.entities.Category;
-import com.gabrielfigueiredo.springcourse.entities.Order;
-import com.gabrielfigueiredo.springcourse.entities.User;
+import com.gabrielfigueiredo.springcourse.entities.*;
 import com.gabrielfigueiredo.springcourse.entities.enums.OrderStatus;
-import com.gabrielfigueiredo.springcourse.repositories.CategoryRepository;
-import com.gabrielfigueiredo.springcourse.repositories.OrderRepository;
-import com.gabrielfigueiredo.springcourse.repositories.UserRepository;
+import com.gabrielfigueiredo.springcourse.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +23,12 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Override
     public void run(String... args) throws Exception {
         User user1 = new User(null, "fulano", "fulano@email.com", "988888888", "123456");
@@ -40,10 +42,30 @@ public class TestConfig implements CommandLineRunner {
         Category category2 = new Category(null, "Books");
         Category category3 = new Category(null, "Computers");
 
+        Product product1 = new Product(null, "The Lord of the Rings", "Lorem ipsum dolor sit amet, consectetur.", 90.5, "");
+        Product product2 = new Product(null, "Smart TV", "Nulla eu imperdiet purus. Maecenas ante.", 2190.0, "");
+        Product product3 = new Product(null, "Macbook Pro", "Nam eleifend maximus tortor, at mollis.", 1250.0, "");
+        Product product4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
+        Product product5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
+
+        OrderItem orderItem1 = new OrderItem(order1, product1, 2, product1.getPrice());
+        OrderItem orderItem2 = new OrderItem(order1, product3, 1, product3.getPrice());
+        OrderItem orderItem3 = new OrderItem(order2, product3, 2, product3.getPrice());
+        OrderItem orderItem4 = new OrderItem(order3, product5, 2, product5.getPrice());
+
         userRepository.saveAll(Arrays.asList(user1, user2));
         orderRepository.saveAll(Arrays.asList(order1, order2, order3));
         categoryRepository.saveAll(Arrays.asList(category1, category2, category3));
+        productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
+        orderItemRepository.saveAll(Arrays.asList(orderItem1, orderItem2, orderItem3, orderItem4));
+
+        product1.getCategories().add(category2);
+        product2.getCategories().add(category1);
+        product2.getCategories().add(category3);
+        product3.getCategories().add(category3);
+        product4.getCategories().add(category3);
+        product5.getCategories().add(category2);
+
+        productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
     }
-
-
 }
