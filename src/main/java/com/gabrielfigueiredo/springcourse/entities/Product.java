@@ -1,5 +1,6 @@
 package com.gabrielfigueiredo.springcourse.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -81,6 +82,7 @@ public class Product implements Serializable {
         return categories;
     }
 
+    @JsonIgnore
     public Set<Order> getOrders () {
         Set<Order> ordersList = new HashSet<>();
         for (OrderItem order: items) {
